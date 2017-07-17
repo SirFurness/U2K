@@ -1,0 +1,27 @@
+{
+    "manifest_version": 2,
+    "name": "U2K",
+    "version": "1.0",
+    "content_scripts": [
+	{
+	    "matches": [
+		"http://www.youtube.com/*",
+		"https://www.youtube.com/*"
+	    ],
+	    "js": ["jquery-3.2.1.min.js", "content.js"]
+	}
+    ],
+    "background": {
+	"page": "background.html"
+    },
+    "permissions": [
+	"tabs",
+	"https://*.khanacademy.org/*",
+	"https://www.khanacademy.org/api/auth2/request_token",
+	"https://www.khanacademy.org/api/auth2/authorize",
+	"https://www.khanacademy.org/api/auth2/access_token"
+    ],
+    "web_accessible_resources": [
+	"chrome_ex_oauth.html"
+    ]
+}
