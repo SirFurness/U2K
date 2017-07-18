@@ -1,11 +1,12 @@
 var tabs = []
 
+chrome.tabs.on
+
 chrome.tabs.onUpdated.addListener(
     function(tabId, changeInfo, tab) {
-	if(tabId in tabs) {
-	    if(tab.url.indexOf("youtube.com") !== -1) {
-		u2k(tab.url, tab);
-	    }
+	if(tab.url.indexOf("youtube.com") !== -1) {
+	    addTabIfNeeded(tab);
+	    u2k(tab.url, tab);
 	}
     }
 );
@@ -39,11 +40,11 @@ chrome.runtime.onMessage.addListener(
 	chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
 	    var currentTab =  arrayOfTabs[0];
 	    
-	    if(request.message == "u2k") {
-		addTabIfNeeded(currentTab);
-		u2k(request.url, currentTab);
+	   // if(request.message == "u2k") {
+	//	addTabIfNeeded(currentTab);
+	//	u2k(request.url, currentTab);
 
-	    }
+	  //  }
 	    if(request.message == "k2u") {
 	        k2u(currentTab);
 	    }

@@ -2,15 +2,6 @@
     "manifest_version": 2,
     "name": "U2K",
     "version": "1.0",
-    "content_scripts": [
-	{
-	    "matches": [
-		"http://www.youtube.com/*",
-		"https://www.youtube.com/*"
-	    ],
-	    "js": ["jquery-3.2.1.min.js", "content.js"]
-	}
-    ],
     "browser_action": {
 	"default_popup": "popup.html"
     },
