@@ -1,29 +1,53 @@
-var oauth = ChromeExOAuth.initBackgroundPage({
-  'request_url': "https://www.khanacademy.org/api/auth2/request_token",
-  'authorize_url': "https://www.khanacademy.org/api/auth2/authorize",
-  'access_url': "https://www.khanacademy.org/api/auth2/access_token",
-  'consumer_key': "dWLEv4kwWTHQzDWk",
-  'consumer_secret': "5mPtJ5tRU7dXQf48",
-  'scope': "https://www.khanacademy.org/api/v1/",
-  'app_name': "U2K"
-});
+var tabs = []
 
-function callback(resp, xhr) {
-    console.log(resp)
-    console.log(xhr)
+chrome.tabs.onUpdated.addListener(
+    function(tabId, changeInfo, tab) {
+	if(tabId in tabs) {
+	    if(tab.url.indexOf("youtube.com") !== -1) {
+		u2k(tab.url, tab);
+	    }
+	}
+    }
+);
+
+function u2k(url, currentTab) {
+    if(currentTab.url != tabs[currentTab.id].pastUrl) {
+	chrome.tabs.update(currentTab.id, {url: "https://www.khanacademy.org/mission/algebra2"});
+	tabs[currentTab.id].pastUrl = url;
+	tabs[currentTab.id].canContinue = true;
+    }
+}
+
+function k2u(currentTab) {
+    if(!(currentTab.id in tabs)) {
+	return;
+    }
+    if(tabs[currentTab.id].canContinue) {
+	chrome.tabs.update(currentTab.id, {url: tabs[currentTab.id].pastUrl});
+    }
+    tabs[currentTab.id]['canContinue'] = false;
+}
+
+function addTabIfNeeded(currentTab) {
+    if(!(currentTab.id in tabs)) {
+	tabs[currentTab.id] = {tab: currentTab, id: currentTab.id, shouldChange: true, pastUrl: '', canContinue: false};
+    }
 }
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
-	if(request.message == "u2k") {
-	    oauth.authorize(function() {
-		console.log("on authorize");
-		var url = 'https://khanacademy.org/api/v1/user/exercises/progress_changes'
-		var request = {
-		    'method': 'GET'
-		}
-		oauth.sendSignedRequest(url, callback, request);
-	    });
-	}
+	chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
+	    var currentTab =  arrayOfTabs[0];
+	    
+	    if(request.message == "u2k") {
+		addTabIfNeeded(currentTab);
+		u2k(request.url, currentTab);
+
+	    }
+	    if(request.message == "k2u") {
+	        k2u(currentTab);
+	    }
+	});
+	
     }
 );

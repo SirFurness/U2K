@@ -11,17 +11,13 @@
 	    "js": ["jquery-3.2.1.min.js", "content.js"]
 	}
     ],
+    "browser_action": {
+	"default_popup": "popup.html"
+    },
     "background": {
-	"page": "background.html"
+	"scripts": ["background.js"]
     },
     "permissions": [
-	"tabs",
-	"https://*.khanacademy.org/*",
-	"https://www.khanacademy.org/api/auth2/request_token",
-	"https://www.khanacademy.org/api/auth2/authorize",
-	"https://www.khanacademy.org/api/auth2/access_token"
-    ],
-    "web_accessible_resources": [
-	"chrome_ex_oauth.html"
+	"tabs"
     ]
 }
