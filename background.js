@@ -4,7 +4,7 @@ chrome.tabs.on
 
 chrome.tabs.onUpdated.addListener(
     function(tabId, changeInfo, tab) {
-	if(tab.url.indexOf("youtube.com") !== -1) {
+	if(tab.url.indexOf("youtube.com") !== -1 && tab.url.indexOf("&list=") === -1) {
 	    addTabIfNeeded(tab);
 	    u2k(tab.url, tab);
 	}
